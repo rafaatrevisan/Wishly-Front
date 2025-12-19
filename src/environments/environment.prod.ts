@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://url-api-producao.com'
+  apiUrl: 'wishly-back-production.up.railway.app'
 };
