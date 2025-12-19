@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables, TooltipItem } from 'chart.js';
 import { ProdutoService } from '../../../../core/services/produto.service';
 import { HistoricoService } from '../../../../core/services/historico.service';
 import { ProdutoResponseDTO } from '../../../../core/models/produto.model';
@@ -43,10 +43,8 @@ export class ProdutoDetalhesPageComponent
   showEditModal = false;
   novoPreco = 0;
 
-  // Período do gráfico (últimos 30 dias por padrão)
   diasHistorico = 30;
 
-  // Formulário de edição do produto
   formularioEdicao = {
     nome: '',
     link: '',
@@ -127,7 +125,6 @@ export class ProdutoDetalhesPageComponent
       return;
     }
 
-    // Destruir gráfico anterior se existir
     if (this.chart) {
       this.chart.destroy();
     }
@@ -173,8 +170,8 @@ export class ProdutoDetalhesPageComponent
           },
           tooltip: {
             callbacks: {
-              label: (context) =>
-                `R$ ${(context.parsed.y ?? 0).toFixed(2)}`
+              label: (context: TooltipItem<'line'>) =>
+                `R$ ${Number(context.parsed.y ?? 0).toFixed(2)}`
             }
           }
         },
@@ -182,7 +179,7 @@ export class ProdutoDetalhesPageComponent
           y: {
             beginAtZero: false,
             ticks: {
-              callback: (value) => `R$ ${value}`
+              callback: (value: string | number) => `R$ ${Number(value)}`
             }
           }
         }
@@ -197,7 +194,6 @@ export class ProdutoDetalhesPageComponent
   }
 
   abrirModalEdicao(): void {
-    // Preencher formulário com dados atuais
     if (this.produto) {
       this.formularioEdicao = {
         nome: this.produto.nome,
@@ -215,28 +211,27 @@ export class ProdutoDetalhesPageComponent
   }
 
   atualizarProduto(): void {
-    // Validações
-    if (!this.formularioEdicao.nome || !this.formularioEdicao.nome.trim()) {
+    if (!this.formularioEdicao.nome.trim()) {
       this.toastr.warning('Informe o nome do produto');
       return;
     }
 
-    if (!this.formularioEdicao.link || !this.formularioEdicao.link.trim()) {
+    if (!this.formularioEdicao.link.trim()) {
       this.toastr.warning('Informe o link do produto');
       return;
     }
 
-    if (!this.formularioEdicao.loja || !this.formularioEdicao.loja.trim()) {
+    if (!this.formularioEdicao.loja.trim()) {
       this.toastr.warning('Selecione uma loja');
       return;
     }
 
-    if (!this.formularioEdicao.precoAtual || this.formularioEdicao.precoAtual <= 0) {
+    if (this.formularioEdicao.precoAtual <= 0) {
       this.toastr.warning('Informe um preço válido');
       return;
     }
 
-    if (!this.formularioEdicao.imagemUrl || !this.formularioEdicao.imagemUrl.trim()) {
+    if (!this.formularioEdicao.imagemUrl.trim()) {
       this.toastr.warning('Informe a URL da imagem');
       return;
     }
