@@ -1,0 +1,67 @@
+.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 0;
+
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white !important;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-logo {
+      height: 32px;
+      max-height: 32px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .brand-text {
+      background: linear-gradient(to right, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.3s;
+
+    &:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    i {
+      opacity: 0.9;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .navbar-collapse {
+      background: rgba(102, 126, 234, 0.95);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+  }
+}

@@ -1,0 +1,245 @@
+<div class="produto-detalhes-container">
+  <div class="container py-5">
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && produto">
+      <!-- Header -->
+      <div class="mb-4">
+        <a [routerLink]="['/listas', produto?.lista?.id || produto?.listaId]" class="back-link">
+          <i class="fas fa-arrow-left me-2"></i>
+          Voltar para Lista
+        </a>
+      </div>
+
+      <!-- Card Principal -->
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="produto-card">
+            <div class="produto-image">
+              <img [src]="produto.imagemUrl" [alt]="produto.nome">
+            </div>
+            <div class="produto-info">
+              <div class="loja-badge" [style.background]="getLojaInfo(produto.loja).cor">
+                <i [class]="getLojaInfo(produto.loja).icone"></i>
+                {{ getLojaInfo(produto.loja).nome }}
+              </div>
+              
+              <h3>{{ produto.nome }}</h3>
+              
+              <div class="preco-atual">
+                {{ produto.precoAtual | currency: 'BRL' }}
+              </div>
+
+              <div class="produto-meta">
+                <small class="text-muted">
+                  <i class="fas fa-clock me-1"></i>
+                  Atualizado em {{ produto.ultimaAtualizacao | date: 'dd/MM/yyyy HH:mm' }}
+                </small>
+              </div>
+
+              <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-primary" (click)="abrirModalEdicao()">
+                  <i class="fas fa-edit me-2"></i>
+                  Atualizar Produto
+                </button>
+                <button 
+                  class="btn btn-success" 
+                  (click)="atualizarAutomatico()"
+                  *ngIf="getLojaInfo(produto.loja).temAutomacao">
+                  <i class="fas fa-sync-alt me-2"></i>
+                  Atualizar Automaticamente
+                </button>
+                <a 
+                  [href]="produto.link" 
+                  target="_blank" 
+                  class="btn btn-outline-light">
+                  <i class="fas fa-external-link-alt me-2"></i>
+                  Ver na Loja
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <!-- Estatísticas -->
+          <div class="stats-cards mb-4">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="stat-card">
+                  <div class="stat-icon bg-success">
+                    <i class="fas fa-arrow-down"></i>
+                  </div>
+                  <div class="stat-info">
+                    <small>Menor Preço</small>
+                    <h5>{{ getMenorPreco() | currency: 'BRL' }}</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="stat-card">
+                  <div class="stat-icon bg-danger">
+                    <i class="fas fa-arrow-up"></i>
+                  </div>
+                  <div class="stat-info">
+                    <small>Maior Preço</small>
+                    <h5>{{ getMaiorPreco() | currency: 'BRL' }}</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="stat-card">
+                  <div 
+                    class="stat-icon" 
+                    [class.bg-success]="getVariacao().tipo === 'baixa'"
+                    [class.bg-danger]="getVariacao().tipo === 'alta'"
+                    [class.bg-secondary]="getVariacao().tipo === 'estavel'">
+                    <i 
+                      class="fas" 
+                      [class.fa-arrow-down]="getVariacao().tipo === 'baixa'"
+                      [class.fa-arrow-up]="getVariacao().tipo === 'alta'"
+                      [class.fa-equals]="getVariacao().tipo === 'estavel'"></i>
+                  </div>
+                  <div class="stat-info">
+                    <small>Variação</small>
+                    <h5>{{ getVariacao().valor | number: '1.1-1' }}%</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráfico -->
+          <div class="grafico-card">
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-chart-line me-2"></i>
+                Histórico de Preços
+              </h5>
+              <div class="periodo-btns">
+                <button 
+                  class="btn btn-sm" 
+                  [class.btn-primary]="diasHistorico === 7"
+                  [class.btn-outline-primary]="diasHistorico !== 7"
+                  (click)="alterarPeriodo(7)">
+                  7 dias
+                </button>
+                <button 
+                  class="btn btn-sm" 
+                  [class.btn-primary]="diasHistorico === 30"
+                  [class.btn-outline-primary]="diasHistorico !== 30"
+                  (click)="alterarPeriodo(30)">
+                  30 dias
+                </button>
+                <button 
+                  class="btn btn-sm" 
+                  [class.btn-primary]="diasHistorico === 90"
+                  [class.btn-outline-primary]="diasHistorico !== 90"
+                  (click)="alterarPeriodo(90)">
+                  90 dias
+                </button>
+                <button 
+                  class="btn btn-sm" 
+                  [class.btn-primary]="diasHistorico === 180"
+                  [class.btn-outline-primary]="diasHistorico !== 180"
+                  (click)="alterarPeriodo(180)">
+                  6 meses
+                </button>
+                <button 
+                  class="btn btn-sm" 
+                  [class.btn-primary]="diasHistorico === 365"
+                  [class.btn-outline-primary]="diasHistorico !== 365"
+                  (click)="alterarPeriodo(365)">
+                  1 ano
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div *ngIf="historico.length === 0" class="text-center py-5 text-muted">
+                <i class="fas fa-chart-line fa-3x mb-3"></i>
+                <p>Nenhum histórico de preços ainda</p>
+              </div>
+              <div *ngIf="historico.length > 0" style="height: 300px; position: relative;">
+                <canvas #chartCanvas></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal" [class.show]="showEditModal" *ngIf="showEditModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Atualizar Produto</h5>
+        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nome do Produto</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="formularioEdicao.nome"
+            placeholder="Ex: PlayStation 5">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Link do Produto</label>
+          <input 
+            type="url" 
+            class="form-control" 
+            [(ngModel)]="formularioEdicao.link"
+            placeholder="https://...">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Loja</label>
+          <select class="form-control" [(ngModel)]="formularioEdicao.loja">
+            <option *ngFor="let loja of lojas" [value]="loja">
+              {{ getLojaInfo(loja).nome }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">URL da Imagem</label>
+          <input 
+            type="url" 
+            class="form-control" 
+            [(ngModel)]="formularioEdicao.imagemUrl"
+            placeholder="https://...">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Preço Atual (R$)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            [(ngModel)]="formularioEdicao.precoAtual"
+            step="0.01"
+            min="0">
+        </div>
+        <div class="alert alert-info mb-0">
+          <i class="fas fa-info-circle me-2"></i>
+          Todos os campos serão atualizados no sistema
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="fecharModal()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="atualizarProduto()">
+          <i class="fas fa-save me-2"></i>
+          Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" *ngIf="showEditModal" (click)="fecharModal()"></div>

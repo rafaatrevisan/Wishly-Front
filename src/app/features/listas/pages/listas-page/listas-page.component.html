@@ -1,0 +1,111 @@
+<div class="listas-container">
+  <div class="container py-5">
+    <!-- Header -->
+    <div class="page-header mb-5">
+      <div class="row align-items-center">
+        <div class="col">
+          <h1 class="text-white">
+            <i class="fas fa-list me-3"></i>
+            Minhas Listas
+          </h1>
+          <p class="text-white-50 mb-0">Gerencie suas listas de desejos</p>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-light btn-lg" (click)="abrirModal()">
+            <i class="fas fa-plus me-2"></i>
+            Nova Lista
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+
+    <!-- Lista vazia -->
+    <div *ngIf="!loading && listas.length === 0" class="empty-state">
+      <i class="fas fa-inbox"></i>
+      <h3>Nenhuma lista criada</h3>
+      <p>Comece criando sua primeira lista de desejos</p>
+      <button class="btn btn-light btn-lg" (click)="abrirModal()">
+        <i class="fas fa-plus me-2"></i>
+        Criar Primeira Lista
+      </button>
+    </div>
+
+    <!-- Grid de listas -->
+    <div *ngIf="!loading && listas.length > 0" class="row g-4">
+      <div *ngFor="let lista of listas" class="col-md-6 col-lg-4">
+        <div class="lista-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5 class="card-title">{{ lista.nome }}</h5>
+              <button 
+                class="btn btn-sm btn-danger" 
+                (click)="removerLista(lista.id!, lista.nome)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            
+            <p class="card-text text-muted" *ngIf="lista.descricao">
+              {{ lista.descricao }}
+            </p>
+            
+            <div class="card-footer">
+              <a 
+                [routerLink]="['/listas', lista.id]" 
+                class="btn btn-primary w-100">
+                <i class="fas fa-eye me-2"></i>
+                Ver Produtos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="showModal" *ngIf="showModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nova Lista</h5>
+        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nome da Lista *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="novaLista.nome"
+            placeholder="Ex: Presentes de Natal">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Descrição (opcional)</label>
+          <textarea 
+            class="form-control" 
+            rows="3"
+            [(ngModel)]="novaLista.descricao"
+            placeholder="Adicione uma descrição..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="fecharModal()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="criarLista()">
+          <i class="fas fa-plus me-2"></i>
+          Criar Lista
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" *ngIf="showModal" (click)="fecharModal()"></div>

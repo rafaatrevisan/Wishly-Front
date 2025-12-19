@@ -1,12 +1,25 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [RouterOutlet, NavbarComponent],
+  template: `
+    <app-navbar></app-navbar>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  `,
+  styles: [`
+    .main-content {
+      min-height: calc(100vh - 60px);
+      padding-top: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+  `]
 })
-export class App {
-  protected readonly title = signal('wishlist-frontend');
+export class AppComponent {
+  title = 'Wishlist';
 }

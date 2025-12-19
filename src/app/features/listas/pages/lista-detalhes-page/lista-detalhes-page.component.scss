@@ -1,0 +1,137 @@
+.lista-detalhes-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.back-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+
+  &:hover {
+    color: white;
+    transform: translateX(-5px);
+  }
+}
+
+.total-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  h5 {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+
+  .total-value {
+    color: #27ae60;
+    font-weight: 700;
+  }
+}
+
+.produto-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  .produto-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;  // ← Mantém proporção sem cortar
+      padding: 0.5rem;      // ← Adiciona espaço interno
+    }
+
+    .loja-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .produto-body {
+    padding: 1.5rem;
+  }
+
+  .produto-nome {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .produto-preco {
+    color: #27ae60;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .produto-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .btn {
+      flex: 1;
+      min-width: 80px;
+    }
+  }
+}
+
+.empty-state {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: white;
+
+  i {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+  }
+
+  h3 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    opacity: 0.8;
+    margin-bottom: 2rem;
+  }
+}

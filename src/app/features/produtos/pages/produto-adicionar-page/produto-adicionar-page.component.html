@@ -1,0 +1,153 @@
+<div class="adicionar-produto-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <!-- Header -->
+        <div class="text-center mb-5">
+          <h1 class="text-white">
+            <i class="fas fa-plus-circle me-3"></i>
+            Adicionar Produto
+          </h1>
+          <p class="text-white-50">Escolha como deseja adicionar o produto</p>
+        </div>
+
+        <!-- Seletor de Tipo -->
+        <div class="tipo-selector mb-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div 
+                class="tipo-card" 
+                [class.active]="tipoLoja === 'automatica'"
+                (click)="selecionarTipo('automatica')">
+                <i class="fas fa-robot"></i>
+                <h5>Automático</h5>
+                <p>Cole o link e deixe o resto conosco</p>
+                <div class="badge bg-success">Recomendado</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div 
+                class="tipo-card" 
+                [class.active]="tipoLoja === 'manual'"
+                (click)="selecionarTipo('manual')">
+                <i class="fas fa-edit"></i>
+                <h5>Manual</h5>
+                <p>Preencha os dados manualmente</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="form-card">
+          <!-- AUTOMÁTICO -->
+          <div *ngIf="tipoLoja === 'automatica'">
+            <div class="lojas-info mb-4">
+              <h6 class="mb-3">
+                <i class="fas fa-store me-2"></i>
+                Lojas com Automação
+              </h6>
+              <div class="row g-2">
+                <div *ngFor="let loja of lojasAutomaticas" class="col-6 col-md-3">
+                  <div class="loja-chip" [style.border-color]="getLojaInfo(loja).cor">
+                    <i [class]="getLojaInfo(loja).icone"></i>
+                    {{ getLojaInfo(loja).nome }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Link do Produto *</label>
+              <input 
+                type="url" 
+                class="form-control form-control-lg" 
+                [(ngModel)]="produto.link"
+                placeholder="https://...">
+              <div class="form-text">
+                Cole o link completo do produto de uma das lojas acima
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i>
+              O sistema extrairá automaticamente o nome, preço e imagem do produto
+            </div>
+          </div>
+
+          <!-- MANUAL -->
+          <div *ngIf="tipoLoja === 'manual'">
+            <div class="mb-3">
+              <label class="form-label">Nome do Produto *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="produto.nome"
+                placeholder="Ex: Notebook Dell Inspiron">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Loja *</label>
+              <select class="form-select" [(ngModel)]="produto.loja">
+                <option value="">Selecione...</option>
+                <option *ngFor="let key of getLojaKeys()" [value]="key">
+                  {{ getLojaInfo(key).nome }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Preço (R$) *</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                [(ngModel)]="produto.precoAtual"
+                placeholder="0.00"
+                step="0.01">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">URL da Imagem *</label>
+              <input 
+                type="url" 
+                class="form-control" 
+                [(ngModel)]="produto.imagemUrl"
+                placeholder="https://...">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Link do Produto *</label>
+              <input 
+                type="url" 
+                class="form-control" 
+                [(ngModel)]="produto.link"
+                placeholder="https://...">
+            </div>
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex gap-2 mt-4">
+            <a 
+              class="btn btn-secondary flex-fill" 
+              [routerLink]="['/listas', listaId]">
+              Cancelar
+            </a>
+            <button 
+              class="btn btn-primary flex-fill" 
+              (click)="adicionarProduto()"
+              [disabled]="loading">
+              <span *ngIf="!loading">
+                <i class="fas fa-plus me-2"></i>
+                Adicionar Produto
+              </span>
+              <span *ngIf="loading">
+                <i class="fas fa-spinner fa-spin me-2"></i>
+                Adicionando...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
