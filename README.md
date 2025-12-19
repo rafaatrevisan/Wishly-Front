@@ -8,7 +8,7 @@ Sistema de gerenciamento de listas de desejos com acompanhamento de preços e au
 
 - **Angular 20.3.7**
 - **Bootstrap 5**
-- **Chart.js / ng2-charts** (gráficos)
+- **Chart.js** (gráficos)
 - **Font Awesome** (ícones)
 - **ngx-toastr** (notificações)
 - **SCSS** (estilos)
@@ -43,7 +43,7 @@ npm install bootstrap@5
 npm install @fortawesome/fontawesome-free
 
 # Gráficos
-npm install chart.js ng2-charts
+npm install chart.js
 
 # Componentes Bootstrap
 npm install @ng-bootstrap/ng-bootstrap
@@ -305,7 +305,7 @@ O frontend espera que o backend esteja rodando em `http://localhost:8080` com os
 
 ### Erro: "Cannot find module 'chart.js'"
 ```bash
-npm install chart.js ng2-charts
+npm install chart.js
 ```
 
 ### Erro: "Module not found: @ng-bootstrap/ng-bootstrap"
