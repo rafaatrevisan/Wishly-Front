@@ -87,13 +87,14 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Loja *</label>
-              <select class="form-select" [(ngModel)]="produto.loja">
-                <option value="">Selecione...</option>
-                <option *ngFor="let key of getLojaKeys()" [value]="key">
-                  {{ getLojaInfo(key).nome }}
-                </option>
-              </select>
+              <label class="form-label">Loja</label>
+              <div class="form-control bg-light">
+                <i class="fas fa-question-circle me-2 text-muted"></i>
+                <span class="text-muted">DESCONHECIDA</span>
+              </div>
+              <div class="form-text">
+                Lojas desconhecidas serão registradas como "DESCONHECIDA"
+              </div>
             </div>
 
             <div class="mb-3">

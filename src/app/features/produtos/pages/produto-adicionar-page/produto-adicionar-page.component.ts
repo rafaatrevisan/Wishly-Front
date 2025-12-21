@@ -43,7 +43,8 @@ export class ProdutoAdicionarPageComponent implements OnInit {
     this.tipoLoja = tipo;
     this.produto = {
       link: '',
-      listaId: this.listaId
+      listaId: this.listaId,
+      loja: tipo === 'manual' ? 'DESCONHECIDA' : undefined
     };
   }
 
